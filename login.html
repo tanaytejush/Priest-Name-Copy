@@ -6,92 +6,190 @@
     <title>Login</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <meta name="google-signin-client_id" content="211997350279-bfvrvmgu516sfomfb0ac475gadvl2l9t.apps.googleusercontent.com">
+    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        /* Body and Background */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f9;
+            color: #333;
+        }
+
+        /* Container for login */
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            width: 100%;
+            max-width: 400px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        h1 {
+            color: #5a8dee;
+            margin-bottom: 1rem;
+            font-size: 24px;
+        }
+
+        h2 {
+            color: #333;
+            margin-top: 1rem;
+            font-size: 20px;
+        }
+
+        label {
+            display: block;
+            margin-top: 1rem;
+            color: #666;
+            font-weight: 600;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-top: 0.5rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            outline: none;
+            font-size: 16px;
+            color: #333;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 1.5rem;
+            background-color: #5a8dee;
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #507ace;
+        }
+
+        .google-signin-container {
+            margin-top: 1.5rem;
+        }
+
+        .g-signin2 {
+            width: 100%;
+        }
+
+        #loginError {
+            color: red;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            margin-top: 1.5rem;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Login to Priest Services Platform</h1>
+    <div class="login-container">
+        <header>
+            <h1>Login to Priest Services Platform</h1>
+        </header>
+
         <nav>
             <a href="index.html">Home</a> |
             <a href="signup.html">Sign Up</a>
         </nav>
-    </header>
 
-    <main>
+        <!-- Manual Login Form -->
         <h2>Login with Email</h2>
         <form id="loginForm">
             <label for="username">Username (Email):</label>
-            <input type="email" id="username" name="username" required><br>
+            <input type="email" id="username" name="username" required>
 
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required><br>
+            <input type="password" id="password" name="password" required>
 
             <button type="submit">Login</button>
         </form>
-        
-        <p id="loginError" style="color: red; display: none;">Invalid email or password. Please try again.</p>
 
-        <h2>Or Login with Google</h2>
-        <!-- Google Sign-In button -->
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <p id="loginError">Invalid email or password. Please try again.</p>
 
-        <!-- Optional: Sign Out button -->
-        <a href="#" onclick="signOut();">Sign out</a>
-    </main>
+        <!-- Google Sign-In Section -->
+        <div class="google-signin-container">
+            <h2>Or Login with Google</h2>
+            <div class="g-signin2" data-onsuccess="onSignIn"></div>
+            <a href="#" onclick="signOut();">Sign out</a>
+        </div>
 
-    <footer>
-        <p>&copy; 2024 Priest Services Platform</p>
-    </footer>
+        <footer>
+            <p>&copy; 2024 Priest Services Platform</p>
+        </footer>
+    </div>
 
     <script>
-        // Handle manual login
+        // Manual login handling
         document.getElementById('loginForm').addEventListener('submit', function(event) {
             event.preventDefault();
             
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const users = JSON.parse(localStorage.getItem('users')) || [];
-            
+
             const user = users.find(user => user.email === username && user.password === password);
 
             if (user) {
-                // Redirect based on user role
-                if (user.role === "user") {
-                    window.location.href = "user_dashboard.html";
-                } else if (user.role === "priest") {
-                    window.location.href = "priest_dashboard.html";
-                }
+                // Redirect to the appropriate dashboard based on role
+                redirectUser(user.role);
             } else {
-                // Show error message if login fails
                 document.getElementById('loginError').style.display = 'block';
             }
         });
 
-        // Function to handle successful Google sign-in
+        // Google sign-in handling
         function onSignIn(googleUser) {
-            var profile = googleUser.getBasicProfile();
-            var email = profile.getEmail();
-            
-            // Check if the user exists in localStorage
+            const profile = googleUser.getBasicProfile();
+            const email = profile.getEmail();
+
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const user = users.find(user => user.email === email);
 
             if (user) {
-                // Redirect based on user role
-                if (user.role === "user") {
-                    window.location.href = "user_dashboard.html";
-                } else if (user.role === "priest") {
-                    window.location.href = "priest_dashboard.html";
-                }
+                redirectUser(user.role);
             } else {
                 alert("No account found for this Google account. Please sign up.");
             }
         }
 
-        // Optional: Function to sign out
+        // Redirect based on user role
+        function redirectUser(role) {
+            if (role === "user") {
+                window.location.href = "user_dashboard.html";
+            } else if (role === "priest") {
+                window.location.href = "priest_dashboard.html";
+            }
+        }
+
+        // Google sign-out handling
         function signOut() {
-            var auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(function () {
+            const auth2 = gapi.auth2.getAuthInstance();
+            auth2.signOut().then(() => {
                 console.log('User signed out.');
                 alert("You have been signed out.");
             });
@@ -99,3 +197,4 @@
     </script>
 </body>
 </html>
+
