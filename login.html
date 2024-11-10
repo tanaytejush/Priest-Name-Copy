@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="style.css">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID">
     <style>
         /* General Reset */
@@ -89,10 +89,6 @@
             margin-top: 1.5rem;
         }
 
-        .g-signin2 {
-            width: 100%;
-        }
-
         #loginError {
             color: red;
             display: none;
@@ -134,8 +130,14 @@
         <!-- Google Sign-In Section -->
         <div class="google-signin-container">
             <h2>Or Login with Google</h2>
-            <div class="g-signin2" data-onsuccess="onSignIn"></div>
-            <a href="#" onclick="signOut();">Sign out</a>
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="onGoogleSignIn"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard"></div>
         </div>
 
         <footer>
@@ -162,10 +164,10 @@
             }
         });
 
-        // Google sign-in handling
-        function onSignIn(googleUser) {
-            const profile = googleUser.getBasicProfile();
-            const email = profile.getEmail();
+        // Google sign-in callback
+        function onGoogleSignIn(response) {
+            const decodedToken = parseJwt(response.credential);
+            const email = decodedToken.email;
 
             const users = JSON.parse(localStorage.getItem('users')) || [];
             const user = users.find(user => user.email === email);
@@ -177,6 +179,16 @@
             }
         }
 
+        // Parse JWT token to extract email
+        function parseJwt(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
         // Redirect based on user role
         function redirectUser(role) {
             if (role === "user") {
@@ -185,16 +197,6 @@
                 window.location.href = "priest_dashboard.html";
             }
         }
-
-        // Google sign-out handling
-        function signOut() {
-            const auth2 = gapi.auth2.getAuthInstance();
-            auth2.signOut().then(() => {
-                console.log('User signed out.');
-                alert("You have been signed out.");
-            });
-        }
     </script>
 </body>
 </html>
-
