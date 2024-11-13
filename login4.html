@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID">
+</head>
+<body>
+    <div class="login-container">
+        <header>
+            <h1>Priest Services Platform - Login</h1>
+        </header>
+
+        <h2>Login with Email</h2>
+        <form id="loginForm">
+            <label for="username">Username (Email):</label>
+            <input type="email" id="username" name="username" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+
+        <p id="loginError" style="display: none; color: red;">Invalid email or password. Please try again.</p>
+
+        <!-- Google Login Button -->
+        <div class="google-signin-container">
+            <h3>Or Login with Google</h3>
+            <div id="g_id_onload"
+                 data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                 data-context="signin"
+                 data-ux_mode="popup"
+                 data-callback="onGoogleLogin"
+                 data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard"></div>
+        </div>
+    </div>
+
+    <script>
+        // Redirect to the priest dashboard after Google login
+        function onGoogleLogin(response) {
+            if (response.credential) {
+                window.location.href = "priest dashboard3.html"; // Redirect to dashboard
+            }
+        }
+
+        // Handle form submission for email login
+        document.getElementById("loginForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            // Mock validation for demonstration
+            if (username === "priest@example.com" && password === "password123") {
+                window.location.href = "priest dashboard3.html"; // Redirect to dashboard
+            } else {
+                document.getElementById("loginError").style.display = "block"; // Show error
+            }
+        });
+    </script>
+</body>
+</html>
