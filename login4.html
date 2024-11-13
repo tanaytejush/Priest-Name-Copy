@@ -7,6 +7,103 @@
     <link rel="stylesheet" href="style.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <meta name="google-signin-client_id" content="YOUR_GOOGLE_CLIENT_ID">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f7f9fc;
+            color: #333;
+        }
+
+        .login-container {
+            background-color: white;
+            padding: 2rem;
+            max-width: 450px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        h1 {
+            color: #4a90e2;
+            font-size: 24px;
+            margin-bottom: 1rem;
+        }
+
+        h2 {
+            color: #333;
+            font-size: 20px;
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            margin-top: 1rem;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 0.5rem;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            border-color: #4a90e2;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 1.5rem;
+            background-color: #4a90e2;
+            color: white;
+            font-weight: bold;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #3a78d1;
+        }
+
+        .google-signin-container {
+            margin-top: 1.5rem;
+        }
+
+        #loginError {
+            color: red;
+            display: none;
+            margin-top: 0.5rem;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 14px;
+            color: #888;
+        }
+    </style>
 </head>
 <body>
     <div class="login-container">
@@ -25,7 +122,7 @@
             <button type="submit">Login</button>
         </form>
 
-        <p id="loginError" style="display: none; color: red;">Invalid email or password. Please try again.</p>
+        <p id="loginError">Invalid email or password. Please try again.</p>
 
         <!-- Google Login Button -->
         <div class="google-signin-container">
@@ -39,6 +136,10 @@
             </div>
             <div class="g_id_signin" data-type="standard"></div>
         </div>
+
+        <footer>
+            <p>&copy; 2024 Priest Services Platform</p>
+        </footer>
     </div>
 
     <script>
@@ -55,11 +156,11 @@
             const username = document.getElementById("username").value;
             const password = document.getElementById("password").value;
 
-            // Mock validation for demonstration
+            // Mock validation for demonstration; replace with actual authentication
             if (username === "priest@example.com" && password === "password123") {
                 window.location.href = "priest dashboard3.html"; // Redirect to dashboard
             } else {
-                document.getElementById("loginError").style.display = "block"; // Show error
+                document.getElementById("loginError").style.display = "block"; // Show error message
             }
         });
     </script>
