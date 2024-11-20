@@ -171,7 +171,7 @@
             const priestList = document.getElementById("priestList");
             priestList.innerHTML = "";
 
-            priests.forEach((priest, index) => {
+            priests.forEach(priest => {
                 const priestCard = document.createElement("div");
                 priestCard.className = "priest-card";
                 priestCard.innerHTML = `
@@ -179,24 +179,10 @@
                     <h3>${priest.name}</h3>
                     <p><strong>Specialization:</strong> ${priest.specialization}</p>
                     <p><strong>Location:</strong> ${priest.location}</p>
-                    <button onclick="bookNow(${index})">Book Now</button>
+                    <button>Book Now</button>
                 `;
                 priestList.appendChild(priestCard);
             });
-        }
-
-        // Book Now functionality
-        function bookNow(index) {
-            const priest = priests[index];
-            const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-            bookings.push({
-                name: priest.name,
-                specialization: priest.specialization,
-                location: priest.location,
-                date: new Date().toLocaleString()
-            });
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-            alert(`${priest.name} has been booked successfully!`);
         }
 
         // Load priests on page load
