@@ -72,8 +72,8 @@
             padding: 10px;
             margin-bottom: 10px;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
         }
 
         #serviceList button {
@@ -172,24 +172,7 @@
             }
         }
 
-        // Book a service
-        function bookService(serviceIndex) {
-            const services = JSON.parse(localStorage.getItem('services')) || [];
-            const selectedService = services[serviceIndex];
-
-            let bookings = JSON.parse(localStorage.getItem('bookings')) || [];
-            bookings.push({
-                name: selectedService.name,
-                fee: selectedService.fee,
-                availability: selectedService.availability,
-                date: new Date().toLocaleString()
-            });
-
-            localStorage.setItem('bookings', JSON.stringify(bookings));
-            loadBookings();
-        }
-
-        // Load existing bookings
+        // Load existing bookings from localStorage
         function loadBookings() {
             const bookings = JSON.parse(localStorage.getItem('bookings')) || [];
             const bookingsList = document.getElementById('bookingsList');
@@ -200,7 +183,12 @@
             } else {
                 bookings.forEach(booking => {
                     const bookingItem = document.createElement('li');
-                    bookingItem.textContent = `${booking.name} - Fee: ₹${booking.fee}, Booked on: ${booking.date}`;
+                    bookingItem.innerHTML = `
+                        <strong>${booking.name}</strong><br>
+                        Specialization: ${booking.specialization}<br>
+                        Location: ${booking.location}<br>
+                        Booked on: ${booking.date}
+                    `;
                     bookingsList.appendChild(bookingItem);
                 });
             }
