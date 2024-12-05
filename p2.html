@@ -1,0 +1,91 @@
+<div class="container">
+    <h1>Welcome to Priest Services Platform</h1>
+    <div class="tabs">
+        <button id="loginTab" class="active">Login</button>
+        <button id="signupTab">Sign Up</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="loginForm" class="form active">
+        <form id="loginWithOtpForm">
+            <label for="loginMethod">Login With:</label>
+            <select id="loginMethod" name="loginMethod" required>
+                <option value="email">Email</option>
+                <option value="phone">Phone Number</option>
+            </select>
+
+            <label for="loginInput">Email/Phone:</label>
+            <input type="text" id="loginInput" name="loginInput" required>
+
+            <button type="button" id="requestOtpBtn">Request OTP</button>
+
+            <div id="otpSection" style="display: none;">
+                <label for="otp">Enter OTP:</label>
+                <input type="text" id="otp" name="otp" required>
+                <button type="button" id="verifyOtpBtn">Verify OTP</button>
+                <p id="otpError" style="color: red; display: none;">Invalid OTP. Please try again.</p>
+            </div>
+        </form>
+    </div>
+
+    <!-- Sign-Up Form -->
+    <div id="signupForm" class="form">
+        <form>
+            <!-- Existing fields... -->
+
+            <button type="submit">Sign Up</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Priest Services Platform</p>
+    </footer>
+</div>
+
+<script>
+    let generatedOtp; // Simulated OTP for verification
+
+    // Toggle between Login and Sign-Up tabs
+    document.getElementById('loginTab').addEventListener('click', () => {
+        document.getElementById('loginTab').classList.add('active');
+        document.getElementById('signupTab').classList.remove('active');
+        document.getElementById('loginForm').classList.add('active');
+        document.getElementById('signupForm').classList.remove('active');
+    });
+
+    document.getElementById('signupTab').addEventListener('click', () => {
+        document.getElementById('signupTab').classList.add('active');
+        document.getElementById('loginTab').classList.remove('active');
+        document.getElementById('signupForm').classList.add('active');
+        document.getElementById('loginForm').classList.remove('active');
+    });
+
+    // Request OTP logic
+    document.getElementById('requestOtpBtn').addEventListener('click', () => {
+        const loginMethod = document.getElementById('loginMethod').value;
+        const loginInput = document.getElementById('loginInput').value;
+
+        if (!loginInput) {
+            alert(`Please enter a valid ${loginMethod}.`);
+            return;
+        }
+
+        // Simulate OTP generation
+        generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        alert(`OTP sent to your ${loginMethod}: ${generatedOtp}`); // Replace with actual email/SMS service integration
+
+        document.getElementById('otpSection').style.display = 'block';
+    });
+
+    // Verify OTP logic
+    document.getElementById('verifyOtpBtn').addEventListener('click', () => {
+        const enteredOtp = document.getElementById('otp').value;
+
+        if (enteredOtp === generatedOtp) {
+            alert('Login Successful!');
+            window.location.href = 'dashboard.html'; // Redirect after verification
+        } else {
+            document.getElementById('otpError').style.display = 'block';
+        }
+    });
+</script>
