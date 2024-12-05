@@ -1,0 +1,40 @@
+<script>
+    let generatedOtp;
+
+    // Function to request OTP
+    document.getElementById('requestOtpBtn').addEventListener('click', () => {
+        const loginMethod = document.getElementById('loginMethod').value;
+        const loginInput = document.getElementById('loginInput').value;
+
+        if (!loginInput) {
+            alert(`Please enter a valid ${loginMethod}.`);
+            return;
+        }
+
+        // Simulate OTP generation
+        generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+        alert(`OTP sent to your ${loginMethod}: ${generatedOtp}`); // Replace with email/SMS integration
+
+        document.getElementById('otpSection').style.display = 'block';
+    });
+
+    // Function to verify OTP and redirect
+    document.getElementById('verifyOtpBtn').addEventListener('click', () => {
+        const enteredOtp = document.getElementById('otp').value;
+
+        if (enteredOtp === generatedOtp) {
+            // Determine user type
+            const loginInput = document.getElementById('loginInput').value;
+
+            if (loginInput.includes('@priest.com')) { // Example condition for priests
+                alert('Welcome, Priest!');
+                window.location.href = 'priest_dashboard3.html'; // Redirect to Priest Dashboard
+            } else {
+                alert('Welcome, User!');
+                window.location.href = 'user_dashboard2.html'; // Redirect to User Dashboard
+            }
+        } else {
+            alert('Wrong OTP. Please try again later.');
+        }
+    });
+</script>
